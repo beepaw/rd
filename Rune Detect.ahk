@@ -5,12 +5,13 @@ IniRead, user, config.ini, Settings, name
 IniRead, macrok, config.ini, Settings, macrokey
 IniRead, jumpk, config.ini, Settings, jumpkey
 IniRead, npck, config.ini, Settings, npckey
+IniRead, UsersToTag, config.ini, Settings, UsersToTag
 
 Global wURL2 = wURL
 Global role2 = role
-
 Global notify = 0
 Global crashed = 0
+Global UsersToTag2 = UsersToTag
 
 if !wURL2 {
 MsgBox, No Webhook URL found, please add it under config.ini
@@ -23,6 +24,11 @@ if (role2 > 0) {
 role3 := "<@&" role2 ">"
 } else {
 role3 =
+}
+StringSplit, Tagging, UsersToTag2, `,
+Loop, %Tagging0%
+{
+    role3 .= "<@" Tagging%A_Index% ">"
 }
   FormatTime, CurrentTime,, MMM dd yyyy hh:mm:ss tt
   payload := "{""content"" : """ . role3 . """,""embeds"":[{""title"" : """ . Title . """, ""description"" : """ . Description . """, ""color"" : """ . Color . """, ""footer"" : { ""text"" : """ . CurrentTime . """, ""icon_url"" : ""https://i.imgur.com/E5E97dv.png"" },""thumbnail"" :{ ""url"" : """ . Thumbnail . """}}]}"
